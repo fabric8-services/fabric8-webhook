@@ -7,12 +7,13 @@ import (
 	"os/user"
 	"runtime"
 
-	"github.com/fabric8-services/fabric8-common/configuration"
 	"github.com/fabric8-services/fabric8-common/log"
 	"github.com/fabric8-services/fabric8-common/metric"
 	"github.com/fabric8-services/fabric8-common/sentry"
 	"github.com/fabric8-services/fabric8-webhook/app"
+	"github.com/fabric8-services/fabric8-webhook/configuration"
 	"github.com/fabric8-services/fabric8-webhook/controller"
+	"github.com/fabric8-services/fabric8-webhook/verification"
 	"github.com/goadesign/goa"
 	goalogrus "github.com/goadesign/goa/logging/logrus"
 	"github.com/goadesign/goa/middleware"
@@ -99,6 +100,16 @@ func main() {
 	statusCtrl := controller.NewStatusController(service)
 	app.MountStatusController(service, statusCtrl)
 
+	verificationSvc, err := verification.New(service, config.GetMonitorIPDuration())
+
+	if err != nil {
+		log.Logger().Fatal("Verification Service Initialisation Failed", err)
+	}
+
+	// Mount "webhook" controller
+	webhookCtrl := controller.NewWebhookController(service,
+		config, verificationSvc)
+	app.MountWebhookController(service, webhookCtrl)
 	log.Logger().Infoln("Git Commit SHA: ", app.Commit)
 	log.Logger().Infoln("UTC Build Time: ", app.BuildTime)
 	log.Logger().Infoln("UTC Start Time: ", app.StartTime)
