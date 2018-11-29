@@ -91,8 +91,8 @@ func (s *service) setHookIPs() error {
 		ipnets = append(ipnets, ipnet)
 	}
 	s.lock.Lock()
+	defer s.lock.Unlock()
 	s.hookIPs = ipnets
-	s.lock.Unlock()
 	return nil
 }
 
@@ -107,12 +107,11 @@ func (s *service) monitorHookIPs() {
 func (s *service) isGithubIP(i string) bool {
 	ip := net.ParseIP(i)
 	s.lock.RLock()
+	defer s.lock.RUnlock()
 	for _, ipnet := range s.hookIPs {
 		if ipnet.Contains(ip) {
-			s.lock.RUnlock()
 			return true
 		}
 	}
-	s.lock.RUnlock()
 	return false
 }

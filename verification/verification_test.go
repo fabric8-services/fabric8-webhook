@@ -79,7 +79,7 @@ func TestNew(t *testing.T) {
 					}, errors.New("Mock Error Response")
 				}),
 			},
-			args:        args{15 * time.Minute},
+			args:        args{1 * time.Nanosecond},
 			want:        nil,
 			wantHookIPs: nil,
 			wantErr:     true,
@@ -102,6 +102,7 @@ func TestNew(t *testing.T) {
 				// Changing s.HookIPs and ticker as reflect.Deepequal doesn't work for IPNet
 				got.(*service).hookIPs = tt.want.(*service).hookIPs
 				got.(*service).ticker = tt.want.(*service).ticker
+				got.(*service).ticker.Stop()
 			}
 
 			if !reflect.DeepEqual(got, tt.want) ||
@@ -293,12 +294,12 @@ func Test_service_setHooks(t *testing.T) {
 						StatusCode: 200,
 						// Send response to be tested
 						Body: ioutil.NopCloser(bytes.NewBufferString(`{
-			  "hooks": [
-			    "192.30.252.0/2299",
-			    "185.199.108.0/22",
-			    "140.82.112.0/20"
-			  ],
-			}`)),
+  "hooks": [
+    "192.30.252.0/22",
+    "185.1979.108.777/722",
+    "140.82.112.0/20"
+  ]
+}`)),
 					}, nil
 				}),
 			},
@@ -327,28 +328,6 @@ func Test_service_setHooks(t *testing.T) {
 					hookIPs, tt.want)
 			}
 
-		})
-	}
-}
-
-func Test_service_monitorHookIPs(t *testing.T) {
-	type fields struct {
-		hooks   []*net.IPNet
-		Service *goa.Service
-	}
-	tests := []struct {
-		name   string
-		fields fields
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			s := &service{
-				hookIPs: tt.fields.hooks,
-				Service: tt.fields.Service,
-			}
-			s.monitorHookIPs()
 		})
 	}
 }
