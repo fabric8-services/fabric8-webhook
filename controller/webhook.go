@@ -10,14 +10,9 @@ import (
 	"github.com/goadesign/goa"
 )
 
-// TODO: Get Forward Address using build
-const (
-	forwardURL = "http://localhost:9091"
-)
-
 // WebhookControllerConfiguration the Configuration for the WebhookController
 type webhookControllerConfiguration interface {
-	GetForwardURL() string
+	GetProxyURL() string
 }
 
 // WebhookController implements the Webhook resource.
@@ -43,9 +38,6 @@ func (c *WebhookController) Forward(ctx *app.ForwardWebhookContext) error {
 	// Put your logic here
 
 	// WebhookController_Forward: end_implement
-	//	authURL, _ := url.Parse(c.config.GetAuthServiceURL())
-
-	u, _ := url.Parse("http://localhost:9091")
 	isVerify, err := c.verification.Verify(ctx.Request)
 	if err != nil {
 		c.Service.LogInfo("Error while verifying", "err:", err)
@@ -54,6 +46,8 @@ func (c *WebhookController) Forward(ctx *app.ForwardWebhookContext) error {
 	if !isVerify {
 		return errors.New("Request from unauthorized source")
 	}
+
+	u, _ := url.Parse(c.config.GetProxyURL())
 	proxy := httputil.NewSingleHostReverseProxy(u)
 	proxy.ServeHTTP(ctx.ResponseData, ctx.Request)
 	return nil

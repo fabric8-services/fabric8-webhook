@@ -19,6 +19,6 @@ const (
 	defaultPostgresConnectionRetrySleep = time.Second
 	defaultPostgresConnectionMaxIdle    = -1
 	defaultPostgresConnectionMaxOpen    = -1
-	defaultForwardURL                   = "http://localhost:9091"
+	defaultProxyURL                     = "http://localhost:9091"
 	defaultMonitorIPDuration            = 15 * time.Minute
 )

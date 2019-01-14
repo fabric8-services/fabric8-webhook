@@ -36,8 +36,10 @@ const (
 	varPostgresConnectionRetrySleep = "postgres.connection.retrysleep"
 	varPostgresConnectionMaxIdle    = "postgres.connection.maxidle"
 	varPostgresConnectionMaxOpen    = "postgres.connection.maxopen"
-	varForwardURL                   = "forward.url"
 	varMonitorIPDuration            = "monitor.ip.duration"
+
+	// ProxyURL
+	varProxyURL = "proxy.url"
 )
 
 // New creates a configuration reader object using a configurable configuration
@@ -115,8 +117,8 @@ func (c *Config) setConfigDefaults() {
 	c.v.SetDefault(varPostgresTransactionTimeout,
 		defaultPostgresConnectionTimeout)
 
-	// URL to forward webhook request
-	c.v.SetDefault(varForwardURL, defaultForwardURL)
+	// ProxyURL to forward webhook request
+	c.v.SetDefault(varProxyURL, defaultProxyURL)
 	// Monitor IP Duration for duration between job to update IP
 	c.v.SetDefault(varMonitorIPDuration, defaultMonitorIPDuration)
 }
@@ -248,9 +250,9 @@ func (c *Config) GetPostgresConfigString() string {
 	)
 }
 
-// GetForwardURL returns URL to forward Webhook
-func (c *Config) GetForwardURL() string {
-	return c.v.GetString(varForwardURL)
+// GetProxyURL returns URL to forward Webhook
+func (c *Config) GetProxyURL() string {
+	return c.v.GetString(varProxyURL)
 }
 
 // GetMonitorIPDuration Return duration between monitoring call to
