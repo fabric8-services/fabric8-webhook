@@ -30,7 +30,7 @@ type service struct {
 
 // Service defines verification
 type Service interface {
-	Verify(req *http.Request) bool
+	Verify(req *http.Request) (bool, error)
 }
 
 // New returns a verification service instance
@@ -42,20 +42,27 @@ func New(gs *goa.Service, duration time.Duration) (Service, error) {
 	if err := s.setHookIPs(); err != nil {
 		return nil, err
 	}
-	go s.monitorHookIPs()
 	return s, nil
 }
 
 // Verify verifies whether request came
 // from approved source
-func (s *service) Verify(req *http.Request) bool {
+func (s *service) Verify(req *http.Request) (bool, error) {
 	ip := strings.Split(req.Header.Get("X-Forwarded-For"), ",")
 	if len(ip[0]) == 0 {
 		ip = strings.Split(req.RemoteAddr, ":")
 	}
 	s.Service.LogInfo("IP", "ip", ip)
 
-	return s.isGithubIP(ip[0])
+	if !s.isGithubIP(ip[0]) {
+		if err := s.setHookIPs(); err != nil {
+			s.Service.LogError("Error while setting up"+
+				" hookips", "err", err)
+			return false, nil
+		}
+		return s.isGithubIP(ip[0]), nil
+	}
+	return true, nil
 }
 
 func (s *service) setHookIPs() error {
@@ -94,14 +101,6 @@ func (s *service) setHookIPs() error {
 	defer s.lock.Unlock()
 	s.hookIPs = ipnets
 	return nil
-}
-
-func (s *service) monitorHookIPs() {
-	for range s.ticker.C {
-		if err := s.setHookIPs(); err != nil {
-			s.Service.LogError("Error while monitoring Hook IPS")
-		}
-	}
 }
 
 func (s *service) isGithubIP(i string) bool {

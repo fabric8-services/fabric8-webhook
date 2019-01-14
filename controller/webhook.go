@@ -46,9 +46,13 @@ func (c *WebhookController) Forward(ctx *app.ForwardWebhookContext) error {
 	//	authURL, _ := url.Parse(c.config.GetAuthServiceURL())
 
 	u, _ := url.Parse("http://localhost:9091")
-	if !c.verification.Verify(ctx.Request) {
-		c.Service.LogInfo("")
-		return errors.New("Request from unverified source")
+	isVerify, err := c.verification.Verify(ctx.Request)
+	if err != nil {
+		c.Service.LogInfo("Error while verifying", "err:", err)
+		return err
+	}
+	if !isVerify {
+		return errors.New("Request from unauthorized source")
 	}
 	proxy := httputil.NewSingleHostReverseProxy(u)
 	proxy.ServeHTTP(ctx.ResponseData, ctx.Request)

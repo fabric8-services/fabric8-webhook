@@ -122,10 +122,11 @@ func Test_service_Verify(t *testing.T) {
 		req *http.Request
 	}
 	tests := []struct {
-		name   string
-		fields fields
-		args   args
-		want   bool
+		name    string
+		fields  fields
+		args    args
+		want    bool
+		wantErr bool
 	}{
 		{
 			name: "Verify Source Positive 1",
@@ -174,8 +175,12 @@ func Test_service_Verify(t *testing.T) {
 				hookIPs: tt.fields.hooks,
 				Service: gs,
 			}
-			if got := s.Verify(tt.args.req); got != tt.want {
+			got, err := s.Verify(tt.args.req)
+			if got != tt.want && !tt.wantErr {
 				t.Errorf("service.Verify() = %v, want %v", got, tt.want)
+			}
+			if tt.wantErr && err == nil {
+				t.Error("service.Verify() = wantErr")
 			}
 		})
 	}

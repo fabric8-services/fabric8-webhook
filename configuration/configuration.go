@@ -77,7 +77,7 @@ func GetConfig() (*Config, error) {
 
 func getMainConfigFile() string {
 	// This was either passed as a env var or set inside main.go from --config
-	envConfigPath, _ := os.LookupEnv("BUILD_CONFIG_FILE_PATH")
+	envConfigPath, _ := os.LookupEnv("WEBHOOK_CONFIG_FILE_PATH")
 	return envConfigPath
 }
 
