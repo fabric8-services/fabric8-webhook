@@ -52,11 +52,7 @@ type GHHookStruct struct {
 
 // Forward runs the forward action.
 func (c *WebhookController) Forward(ctx *app.ForwardWebhookContext) error {
-	// WebhookController_Forward: start_implement
 
-	// Put your logic here
-
-	// WebhookController_Forward: end_implement
 	isVerify, err := c.verification.Verify(ctx.Request)
 	if err != nil {
 		c.Service.LogInfo("Error while verifying", "err:", err)
@@ -83,7 +79,11 @@ func (c *WebhookController) Forward(ctx *app.ForwardWebhookContext) error {
 	}
 	switch envType {
 	case "OSIO":
-		u, _ := url.Parse(c.config.GetProxyURL())
+		u, err := url.Parse(c.config.GetProxyURL())
+		if err != nil {
+			return errors.New("Invalid Proxy URL:" +
+				c.config.GetProxyURL())
+		}
 		proxy := httputil.NewSingleHostReverseProxy(u)
 		proxy.ServeHTTP(ctx.ResponseData, ctx.Request)
 	case "OSD":

@@ -52,9 +52,10 @@ func (s *service) Verify(req *http.Request) (bool, error) {
 	if len(ip[0]) == 0 {
 		ip = strings.Split(req.RemoteAddr, ":")
 	}
-	s.Service.LogInfo("IP", "ip", ip)
+	s.Service.LogInfo("Request originated from", "ip:", ip)
 
 	if !s.isGithubIP(ip[0]) {
+		// If not in GHIPs, update GHIPs as it might be changed.
 		if err := s.setHookIPs(); err != nil {
 			s.Service.LogError("Error while setting up"+
 				" hookips", "err", err)

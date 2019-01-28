@@ -131,7 +131,7 @@ func Test_service_Verify(t *testing.T) {
 		{
 			name: "Verify Source Positive 1",
 			fields: fields{
-				hooks: []*net.IPNet{&net.IPNet{IP: net.IPv4(192, 30, 252, 0), Mask: net.IPv4Mask(255, 255, 252, 0)}, &net.IPNet{IP: net.IPv4(185, 199, 108, 0), Mask: net.IPv4Mask(255, 255, 252, 0)}, &net.IPNet{IP: net.IPv4(140, 82, 112, 0), Mask: net.IPv4Mask(255, 255, 240, 0)}},
+				hooks: []*net.IPNet{{IP: net.IPv4(192, 30, 252, 0), Mask: net.IPv4Mask(255, 255, 252, 0)}, {IP: net.IPv4(185, 199, 108, 0), Mask: net.IPv4Mask(255, 255, 252, 0)}, {IP: net.IPv4(140, 82, 112, 0), Mask: net.IPv4Mask(255, 255, 240, 0)}},
 			},
 			args: args{
 				&http.Request{
@@ -147,7 +147,7 @@ func Test_service_Verify(t *testing.T) {
 		{
 			name: "Verify Source Positive 2",
 			fields: fields{
-				hooks: []*net.IPNet{&net.IPNet{IP: net.IPv4(192, 30, 252, 0), Mask: net.IPv4Mask(255, 255, 252, 0)}, &net.IPNet{IP: net.IPv4(185, 199, 108, 0), Mask: net.IPv4Mask(255, 255, 252, 0)}, &net.IPNet{IP: net.IPv4(140, 82, 112, 0), Mask: net.IPv4Mask(255, 255, 240, 0)}},
+				hooks: []*net.IPNet{{IP: net.IPv4(192, 30, 252, 0), Mask: net.IPv4Mask(255, 255, 252, 0)}, {IP: net.IPv4(185, 199, 108, 0), Mask: net.IPv4Mask(255, 255, 252, 0)}, {IP: net.IPv4(140, 82, 112, 0), Mask: net.IPv4Mask(255, 255, 240, 0)}},
 			},
 			args: args{
 				&http.Request{
@@ -159,7 +159,7 @@ func Test_service_Verify(t *testing.T) {
 		{
 			name: "Verify Source Negative 1",
 			fields: fields{
-				hooks: []*net.IPNet{&net.IPNet{IP: net.IPv4(192, 30, 252, 0), Mask: net.IPv4Mask(255, 255, 252, 0)}, &net.IPNet{IP: net.IPv4(185, 199, 108, 0), Mask: net.IPv4Mask(255, 255, 252, 0)}, &net.IPNet{IP: net.IPv4(140, 82, 112, 0), Mask: net.IPv4Mask(255, 255, 240, 0)}},
+				hooks: []*net.IPNet{{IP: net.IPv4(192, 30, 252, 0), Mask: net.IPv4Mask(255, 255, 252, 0)}, {IP: net.IPv4(185, 199, 108, 0), Mask: net.IPv4Mask(255, 255, 252, 0)}, {IP: net.IPv4(140, 82, 112, 0), Mask: net.IPv4Mask(255, 255, 240, 0)}},
 			},
 			args: args{
 				&http.Request{
@@ -354,7 +354,7 @@ func Test_service_isGithubIP(t *testing.T) {
 		{
 			name: "isGithubIP test positive",
 			fields: fields{
-				hooks: []*net.IPNet{&net.IPNet{IP: net.IPv4(135, 104, 0, 0), Mask: net.IPv4Mask(255, 255, 255, 255)}, &net.IPNet{IP: net.IPv4(185, 199, 108, 0), Mask: net.IPv4Mask(255, 255, 252, 0)}, &net.IPNet{IP: net.IPv4(140, 82, 112, 0), Mask: net.IPv4Mask(255, 255, 240, 0)}},
+				hooks: []*net.IPNet{{IP: net.IPv4(135, 104, 0, 0), Mask: net.IPv4Mask(255, 255, 255, 255)}, {IP: net.IPv4(185, 199, 108, 0), Mask: net.IPv4Mask(255, 255, 252, 0)}, {IP: net.IPv4(140, 82, 112, 0), Mask: net.IPv4Mask(255, 255, 240, 0)}},
 			},
 			args: args{i: "185.199.108.17"},
 			want: true,
@@ -362,7 +362,7 @@ func Test_service_isGithubIP(t *testing.T) {
 		{
 			name: "isGithubIP test negative",
 			fields: fields{
-				hooks: []*net.IPNet{&net.IPNet{IP: net.IPv4(135, 104, 0, 0), Mask: net.IPv4Mask(255, 255, 255, 255)}, &net.IPNet{IP: net.IPv4(185, 199, 108, 0), Mask: net.IPv4Mask(255, 255, 252, 0)}, &net.IPNet{IP: net.IPv4(140, 82, 112, 0), Mask: net.IPv4Mask(255, 255, 240, 0)}},
+				hooks: []*net.IPNet{{IP: net.IPv4(135, 104, 0, 0), Mask: net.IPv4Mask(255, 255, 255, 255)}, {IP: net.IPv4(185, 199, 108, 0), Mask: net.IPv4Mask(255, 255, 252, 0)}, {IP: net.IPv4(140, 82, 112, 0), Mask: net.IPv4Mask(255, 255, 240, 0)}},
 			},
 			args: args{i: "25.199.108.17"},
 			want: false,
