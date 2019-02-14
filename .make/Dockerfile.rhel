@@ -12,7 +12,7 @@ ENV F8_USER_NAME=webhook
 RUN useradd --no-create-home -s /bin/bash ${F8_USER_NAME}
 
 # Expose promotheus envs
-COPY .make/pcp/fabric8-build+pmcd.sh /fabric8-build+pmcd.sh
+COPY .make/pcp/fabric8-webhook+pmcd.sh /fabric8-webhook+pmcd.sh
 EXPOSE 44321
 
 COPY bin/fabric8-webhook /bin/fabric8-webhook

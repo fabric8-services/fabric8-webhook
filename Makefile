@@ -58,10 +58,10 @@ REGISTRY_IMAGE = ${PROJECT_NAME}
 
 ifeq ($(TARGET),rhel)
 	REGISTRY_URL_IMAGE := ${REGISTRY_URI}/openshiftio/rhel-${REGISTRY_NS}-${REGISTRY_IMAGE}
-	CONTAINERFILE := Dockerfile.rhel
+	CONTAINERFILE := $(SELF_DIR)/.make/Dockerfile.rhel
 else
 	REGISTRY_URL_IMAGE := ${REGISTRY_URI}/openshiftio/${REGISTRY_NS}-${REGISTRY_IMAGE}
-	CONTAINERFILE := Dockerfile
+	CONTAINERFILE := $(SELF_DIR)/.make/Dockerfile
 endif
 
 $(BUILD_DIR):
